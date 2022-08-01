@@ -147,12 +147,12 @@ int Aiger::new_literal() {
  */
 int Aiger::add_var(std::string variable) {
     if (has_literal(variable)) {
-        std::clog << "add_var: " << variable << " is already added." << std::endl;
+        //std::clog << "add_var: " << variable << " is already added." << std::endl;
         return get_literal(variable);
     } else {
         int literal = new_literal();
         var_literal_map_[variable] = literal;
-        std::clog << "add_var: " << variable << " " << literal << "." << std::endl;
+        //std::clog << "add_var: " << variable << " " << literal << "." << std::endl;
         return literal;
     }
 }
@@ -167,7 +167,7 @@ int Aiger::add_var(std::string variable, int literal) {
     if (has_literal(variable)) {
         int first_literal = get_literal(variable);
         if (first_literal == literal) {
-            std::clog << "add_var: " << variable << " is already added." << std::endl;
+            //std::clog << "add_var: " << variable << " is already added." << std::endl;
             return first_literal;
         } else {
             std::cerr << "add_var: " << variable << " is redefined!" << std::endl;
@@ -177,7 +177,7 @@ int Aiger::add_var(std::string variable, int literal) {
         }
     } else {
         var_literal_map_[variable] = literal;
-        std::clog << "add_var: " << variable << " " << literal << "." << std::endl;
+        //std::clog << "add_var: " << variable << " " << literal << "." << std::endl;
         return literal;
     }
 }
@@ -191,12 +191,12 @@ int Aiger::add_input(std::string variable) {
     int literal = get_literal(variable);
 
     if (has_input(literal) == true) {
-        std::clog << "input " << variable << " is already defined." << std::endl;
-        std::clog << literal << std::endl;
+        //std::clog << "input " << variable << " is already defined." << std::endl;
+        //std::clog << literal << std::endl;
     } else {
         VarLiteral input{literal, variable};
         inputs_.push_back(input);
-        std::clog << "add_input: " << variable << " " << literal << "." << std::endl;
+        //std::clog << "add_input: " << variable << " " << literal << "." << std::endl;
     }
     return literal;
 }
@@ -226,14 +226,14 @@ int Aiger::add_latch(std::string variable, int next_state_literal, int init_val)
                       << " " << literal << " " << next_state_literal << " " << init_val << std::endl;
             exit(1);
         } else {
-            std::clog << "add_latch: " << variable << " is already defined." << std::endl;
-            std::clog << latch.current_state << " " << latch.next_state << " " << latch.init << std::endl;
+            //std::clog << "add_latch: " << variable << " is already defined." << std::endl;
+            //std::clog << latch.current_state << " " << latch.next_state << " " << latch.init << std::endl;
         }
     } else {
         literal = get_literal(variable);
         Latch latch{literal, next_state_literal, init_val, variable};
-        std::clog << "add_latch: " << variable << " " << literal << std::endl;
-        std::clog << latch.current_state << " " << latch.next_state << " " << latch.init << std::endl;
+        //std::clog << "add_latch: " << variable << " " << literal << std::endl;
+        //std::clog << latch.current_state << " " << latch.next_state << " " << latch.init << std::endl;
         latches_.push_back(latch);
     }
     return literal;
@@ -249,12 +249,12 @@ int Aiger::add_output(std::string variable) {
     int literal = get_literal(variable);
 
     if (has_output(literal) == true) {
-        std::clog << "input " << variable << " is already defined." << std::endl;
-        std::clog << literal << std::endl;
+        //std::clog << "input " << variable << " is already defined." << std::endl;
+        //std::clog << literal << std::endl;
     } else {
         VarLiteral varliteral{literal, variable};
         outputs_.push_back(varliteral);
-        std::clog << "add_output: " << variable << " " << literal << "." << std::endl;
+        //std::clog << "add_output: " << variable << " " << literal << "." << std::endl;
     }
     return literal;
 }
@@ -268,7 +268,7 @@ int Aiger::add_output(std::string variable) {
 int Aiger::add_output(std::string variable, int literal) {
     VarLiteral varliteral{literal, variable};
     outputs_.push_back(varliteral);
-    std::clog << "add_output: " << variable << " " << literal << "." << std::endl;
+    //std::clog << "add_output: " << variable << " " << literal << "." << std::endl;
     return literal;
 }
 
@@ -283,7 +283,7 @@ int Aiger::add_andgate(int rhs1, int rhs2) {
     int literal = new_literal();
     AndGate andgate{literal, rhs1, rhs2};
     andgates_.push_back(andgate);
-    std::clog << "add_andgate: " << literal << " " << rhs1 << " " << rhs2 << std::endl;
+    //std::clog << "add_andgate: " << literal << " " << rhs1 << " " << rhs2 << std::endl;
     return literal;
 }
 /**
@@ -303,13 +303,13 @@ int Aiger::add_andgate(int lhs, int rhs1, int rhs2) {
             std::cerr << "Second: " << lhs << " " << rhs1 << " " << rhs2 << std::endl;
             exit(1);
         } else {
-            std::clog << "andgate " << lhs << " is already defined." << std::endl;
-            std::clog << lhs << std::endl;
+            //std::clog << "andgate " << lhs << " is already defined." << std::endl;
+            //std::clog << lhs << std::endl;
         }
     } else {
         AndGate andgate{lhs, rhs1, rhs2};
         andgates_.push_back(andgate);
-        std::clog << "add_andgate: " << lhs << " " << rhs1 << " " << rhs2 << std::endl;
+        //std::clog << "add_andgate: " << lhs << " " << rhs1 << " " << rhs2 << std::endl;
     }
     return lhs;
 }
@@ -317,7 +317,7 @@ int Aiger::add_andgate(int lhs, int rhs1, int rhs2) {
 void Aiger::add_constraint(int constraint)
 {
     constraints_.push_back(constraint);
-    std::clog << "add_constraint: " << constraint << std::endl;
+    //std::clog << "add_constraint: " << constraint << std::endl;
 }
 
 /**
@@ -329,7 +329,7 @@ void Aiger::add_constraint(int constraint)
  */
 int Aiger::add_imply(int lhs, int rhs) {
     return add_or(get_negation(lhs), rhs);
-    std::clog << "add_imply: " << lhs << " -> " << rhs << std::endl;
+    //std::clog << "add_imply: " << lhs << " -> " << rhs << std::endl;
 }
 
 /**
@@ -341,7 +341,7 @@ int Aiger::add_imply(int lhs, int rhs) {
  */
 int Aiger::add_or(int lhs, int rhs) {
     int literal = add_andgate(get_negation(lhs), get_negation(rhs));
-    std::clog << "add_or: " << lhs << " or " << rhs << std::endl;
+    //std::clog << "add_or: " << lhs << " or " << rhs << std::endl;
     return get_negation(literal);
 }
 
@@ -353,7 +353,7 @@ int Aiger::add_or(int lhs, int rhs) {
  * @return int
  */
 int Aiger::add_xnor(int lhs, int rhs) {
-    std::clog << "add_xnor: " << lhs << " xnor " << rhs << std::endl;
+    //std::clog << "add_xnor: " << lhs << " xnor " << rhs << std::endl;
     return add_or(add_andgate(lhs, rhs), add_andgate(get_negation(lhs), get_negation(rhs)));
 }
 /**
@@ -364,7 +364,7 @@ int Aiger::add_xnor(int lhs, int rhs) {
  * @return int
  */
 int Aiger::add_xor(int lhs, int rhs) {
-    std::clog << "add_xor: " << lhs << " xnor " << rhs << std::endl;
+    //std::clog << "add_xor: " << lhs << " xnor " << rhs << std::endl;
     return add_or(add_andgate(get_negation(lhs), rhs), add_andgate(lhs, get_negation(rhs)));
 }
 
@@ -381,7 +381,7 @@ int Aiger::add_pre(std::string variable) {
     int first_cycle_literal = get_literal("first_cycle");
 
     if (has_andgate(pre_var_literal) == true) {
-        std::clog << "pre_" << variable << " is already defined." << std::endl;
+        //std::clog << "pre_" << variable << " is already defined." << std::endl;
     } else {
         int var_literal = get_literal(variable);
         // we don't care first cycle pre_var_func value
