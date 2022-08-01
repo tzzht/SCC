@@ -22,6 +22,7 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <chrono>
 
 #include "blif2aag.h"
 
@@ -108,8 +109,8 @@ void handle_yosys(string input1_path, string input2_path, string output_dir_path
         exit(1);
     }
 
-    string yosys_command1 = "yosys " + yosys_script1_path;
-    string yosys_command2 = "yosys " + yosys_script2_path;
+    string yosys_command1 = "yosys -q -q " + yosys_script1_path;
+    string yosys_command2 = "yosys -q -q " + yosys_script2_path;
     system(yosys_command1.c_str());
     system(yosys_command2.c_str());
 }
@@ -135,10 +136,10 @@ void handle_simplecar(string output_dir_path)
     system(simplecar_command.c_str());
 }
 
-void handle_res(string output_dir_path)
+void handle_res(string output_dir_path, double convert_elapsed_time, double check_elapsed_time)
 {
     string res_path = output_dir_path + "/res/merge.res";
-    string report_path = output_dir_path + "report.txt";
+    string report_path = output_dir_path + "/report.txt";
     ofstream report_file;
     report_file.open(report_path.c_str());
     if(report_file.is_open())
@@ -168,8 +169,10 @@ void handle_res(string output_dir_path)
                         if(b == "b")
                         {
                             equiv = false;
-                            //
+                            //cout << word << " " << b << " " << dot << endl;
                             cout << "simplecar error" << endl;
+                            report_file << "-" << endl;
+                            exit(0);
                             break;
                         }
                     }
@@ -178,7 +181,7 @@ void handle_res(string output_dir_path)
                         equiv = false;
                         break;
                     }
-                } while (res_file.eof());
+                } while (res_file >> word);
                 if(equiv == true)
                 {
                     report_file << "0" << endl;
@@ -203,6 +206,22 @@ void handle_res(string output_dir_path)
     }
     report_file.close();
     
+    string time_path = output_dir_path + "/time.txt";
+    ofstream time_file;
+    time_file.open(time_path.c_str());
+    if(time_file.is_open())
+    {
+        time_file << "convert time: " << convert_elapsed_time << "s; eqcheck time: " << check_elapsed_time << "s" << endl;
+    }
+    else
+    {
+        cerr << "Failed to create time file!" << endl;
+        exit(1);
+    }
+
+    time_file.close();
+
+
 }
 
 int main(int argc, char **argv)
@@ -266,11 +285,17 @@ int main(int argc, char **argv)
 
     if (equiv_check == true)
     {
+        auto convert_begin_time = chrono::high_resolution_clock::now();
+
         handle_constraint();
         handle_yosys(input1_path, input2_path, output_dir_path, libs_path);
         handle_blif2aag(output_dir_path);
+        auto convert_end_time = chrono::high_resolution_clock::now();
         handle_simplecar(output_dir_path);
-        handle_res(output_dir_path);
+        auto check_end_time = chrono::high_resolution_clock::now();
+        auto convert_elapsed_time = chrono::duration_cast<chrono::milliseconds>(convert_end_time - convert_begin_time);
+        auto check_elapsed_time = chrono::duration_cast<chrono::milliseconds>(check_end_time - convert_end_time);
+        handle_res(output_dir_path, (double)convert_elapsed_time.count()/1000, (double)check_elapsed_time.count()/1000);
     }
 
     if (convert = true)
