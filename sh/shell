@@ -1,0 +1,4 @@
+export PATH="/opt/oss-cad-suite/bin:$PATH"
+export PATH="/opt/simplecar:$PATH"
+export PATH="/mnt/hgfs/VSCode/SimpleCarChecker/build:$PATH"
+

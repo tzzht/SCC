@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/SCC.dir/main.cpp.o CMakeFiles/SCC.dir/blif2aag.cpp.o CMakeFiles/SCC.dir/blifparser.cpp.o CMakeFiles/SCC.dir/converter.cpp.o CMakeFiles/SCC.dir/merger.cpp.o CMakeFiles/SCC.dir/blif.cpp.o CMakeFiles/SCC.dir/aiger.cpp.o  -o SCC 

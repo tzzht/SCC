@@ -1,0 +1,3 @@
+/mnt/hgfs/VSCode/SimpleCarChecker/build/CMakeFiles/rebuild_cache.dir
+/mnt/hgfs/VSCode/SimpleCarChecker/build/CMakeFiles/edit_cache.dir
+/mnt/hgfs/VSCode/SimpleCarChecker/build/CMakeFiles/SCC.dir
